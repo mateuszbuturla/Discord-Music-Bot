@@ -5,7 +5,7 @@ export const command: ICommand = {
   name: "play",
   aliases: [],
   requireOnSpecificChannel: true,
-  run: async (client, message, args) => {
+  run: async (client, message, args, noRemoveMessage) => {
     if (!message.member.voice.channel)
       return message.channel
         .send(` You're not in a voice channel!`)
@@ -31,6 +31,10 @@ export const command: ICommand = {
         });
 
     client.player.play(message, args.join(" "), true);
+
+    if (noRemoveMessage) {
+      return;
+    }
 
     message.delete();
   },

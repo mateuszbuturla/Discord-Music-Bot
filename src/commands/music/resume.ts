@@ -4,7 +4,7 @@ export const command: ICommand = {
   name: "resume",
   aliases: [],
   requireOnSpecificChannel: true,
-  run: async (client, message, args) => {
+  run: async (client, message, args, noRemoveMessage) => {
     if (!message.member.voice.channel)
       return message.channel
         .send(`You're not in a voice channel !`)
@@ -43,6 +43,10 @@ export const command: ICommand = {
       .then((msg) => {
         setTimeout(() => msg.delete(), 5000);
       });
+
+    if (noRemoveMessage) {
+      return;
+    }
 
     message.delete();
   },
