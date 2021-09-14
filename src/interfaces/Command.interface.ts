@@ -9,5 +9,6 @@ export interface ICommand {
   name: string;
   description?: string;
   aliases?: string[];
+  requireOnSpecificChannel?: boolean;
   run: Run;
 }

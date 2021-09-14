@@ -1,5 +1,6 @@
 import { IEvent, ICommand } from "../interfaces";
 import { Message } from "discord.js";
+import { checkChannel } from "../helpers/checkChannel";
 
 export const event: IEvent = {
   name: "message",
@@ -22,6 +23,14 @@ export const event: IEvent = {
     if (!cmd) return;
 
     const command = client.commands.get(cmd) || client.aliases.get(cmd);
+
+    if (command.requireOnSpecificChannel) {
+      const validateChannel = checkChannel(message);
+
+      if (!validateChannel) {
+        return;
+      }
+    }
 
     if (command) (command as ICommand).run(client, message, args);
   },
