@@ -1,16 +1,40 @@
-import { Client, Collection, Intents } from "discord.js";
+import { Channel, Client, Collection, Intents, Message } from "discord.js";
 import path from "path";
 import { readdirSync } from "fs";
 import { ICommand, IConfig, IEvent } from "../interfaces";
 import ConfigJSON from "../config.json";
 import { Player } from "discord-player";
 
+const reactions = [
+  {
+    key: "pause",
+    icon: "⏸️",
+  },
+  {
+    key: "stop",
+    icon: "⏹️",
+  },
+  {
+    key: "skip",
+    icon: "⏭️",
+  },
+  {
+    key: "loop",
+    icon: "🔄",
+  },
+  {
+    key: "clear",
+    icon: "🚮",
+  },
+];
 class ExtendedClient extends Client {
   public commands: Collection<string, ICommand> = new Collection();
   public events: Collection<string, IEvent> = new Collection();
   public config: IConfig = ConfigJSON;
   public aliases: Collection<string, ICommand> = new Collection();
   public player: Player;
+  public rootBotMessage: Message;
+  public rootBotChannel: Channel;
 
   constructor() {
     super({
@@ -52,7 +76,59 @@ class ExtendedClient extends Client {
     });
 
     this.player = new Player(this);
+
+    this.on("ready", () => {
+      this.setRootBotMessageReactions();
+    });
   }
+
+  setRootBotMessageReactions = () => {
+    this.channels.cache.forEach((channel) => {
+      if (channel.name === this.config.botChannel) {
+        this.rootBotChannel = channel;
+        return;
+      }
+    });
+    this.rootBotChannel.messages.fetch().then((messages) => {
+      let count = 0;
+      let messagesArray = [];
+
+      messages.forEach((message) => {
+        messagesArray = [...messagesArray, message];
+        count++;
+      });
+
+      const rootBotMessage = messagesArray[count - 1];
+      this.rootBotMessage = rootBotMessage;
+
+      reactions.map((reaction) => {
+        rootBotMessage.react(reaction.icon);
+
+        const reactionFilter = (filterReaction, user) =>
+          filterReaction.emoji.name === reaction.icon &&
+          user.id !== rootBotMessage.author.id;
+
+        const reactionEmoji = rootBotMessage.createReactionCollector(
+          reactionFilter,
+          {
+            time: 60000,
+          }
+        );
+
+        reactionEmoji.on("collect", (r, u) => {
+          r.users.remove(
+            r.users.cache
+              .filter((u) => u !== this.rootBotMessage.author)
+              .first()
+          );
+          const command = this.commands.get(reaction.key);
+
+          if (command)
+            (command as ICommand).run(this, rootBotMessage, [], true);
+        });
+      });
+    });
+  };
 }
 
 export default ExtendedClient;
