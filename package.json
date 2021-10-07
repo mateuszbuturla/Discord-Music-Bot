@@ -5,7 +5,9 @@
   "main": "src/index.ts",
   "scripts": {
     "start": "ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "docker build --tag discordbot .",
+    "start:docker": "docker run -d discordbot"
   },
   "author": "",
   "license": "ISC",
