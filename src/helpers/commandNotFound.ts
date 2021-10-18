@@ -14,6 +14,4 @@ export const commandNotFound = (client, message) => {
   });
 
   sendMessage(message, embed);
-
-  message.delete();
 };
