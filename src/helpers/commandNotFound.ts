@@ -8,16 +8,10 @@ import { sendMessage } from "../utils/sendMessage";
 export const commandNotFound = (client, message) => {
   const config: IConfig = ConfigJSON;
 
-  const embed = new MessageEmbed();
-
-  embed.setColor("RED");
-  embed.setAuthor(
-    client.user.username,
-    client.user.displayAvatarURL({ size: 1024, dynamic: true })
-  );
-  embed.setDescription(
-    `Unknown command. Type ${config.prefix}help to show commands list.`
-  );
+  const embed: MessageEmbed = generateEmber(client, {
+    type: EmbedType.ERROR,
+    description: `Unknown command. Type ${config.prefix}help to show commands list.`,
+  });
 
   sendMessage(message, embed);
 
