@@ -27,6 +27,7 @@ const reactions = [
     icon: "🚮",
   },
 ];
+
 class ExtendedClient extends Client {
   public commands: Collection<string, ICommand> = new Collection();
   public events: Collection<string, IEvent> = new Collection();
@@ -89,6 +90,7 @@ class ExtendedClient extends Client {
         return;
       }
     });
+
     this.rootBotChannel.messages.fetch().then((messages) => {
       let count = 0;
       let messagesArray = [];
