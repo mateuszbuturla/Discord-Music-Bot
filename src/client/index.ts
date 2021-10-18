@@ -4,6 +4,7 @@ import { readdirSync } from "fs";
 import { ICommand, IConfig, IEvent } from "../interfaces";
 import ConfigJSON from "../config.json";
 import { Player } from "discord-player";
+import { logger } from "../utils/logger";
 
 const reactions = [
   {
@@ -59,7 +60,7 @@ class ExtendedClient extends Client {
       for (const file of commands) {
         const { command } = require(`${commandPath}/${dir}/${file}`);
         this.commands.set(command.name, command);
-
+        logger(`Command ${command.name} has been loaded`);
         if (command?.aliases.length !== 0) {
           command.aliases.forEach((alias) => {
             this.aliases.set(alias, command);
@@ -72,7 +73,7 @@ class ExtendedClient extends Client {
     readdirSync(eventPath).forEach(async (file) => {
       const { event } = await import(`${eventPath}/${file}`);
       this.events.set(event.name, event);
-      console.log(event);
+      logger(`Event ${event.name} has been loaded`);
       this.on(event.name, event.run.bind(null, this));
     });
 
