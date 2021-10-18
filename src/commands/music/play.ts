@@ -1,41 +1,40 @@
 import { ICommand } from "../../interfaces";
 import { checkChannel } from "../../helpers/checkChannel";
+import { checkIfUserIsOnVoiceChannel } from "../../helpers/checkIfUserIsOnVoiceChannel";
+import { checkIfIsPlayingCurrently } from "../../helpers/checkIfIsPlayingCurrently";
+import { generateEmber } from "../../utils/generateEmbed";
+import { MessageEmbed } from "discord.js";
+import { EmbedType } from "../../interfaces/Embed.interface";
+import { sendMessage } from "../../utils/sendMessage";
 
 export const command: ICommand = {
   name: "play",
   aliases: [],
   requireOnSpecificChannel: true,
   run: async (client, message, args, noRemoveMessage) => {
-    if (!message.member.voice.channel)
-      return message.channel
-        .send(` You're not in a voice channel!`)
-        .then((msg) => {
-          setTimeout(() => msg.delete(), 5000);
-        });
-
     if (
-      message.guild.me.voice.channel &&
-      message.member.voice.channel.id !== message.guild.me.voice.channel.id
-    )
-      return message.channel
-        .send(`You are not in the same voice channel!`)
-        .then((msg) => {
-          setTimeout(() => msg.delete(), 5000);
+      checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
+      checkIfIsPlayingCurrently(client, message, noRemoveMessage)
+    ) {
+      if (!args[0]) {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.ERROR,
+          description: `Please indicate the title of a song!`,
         });
 
-    if (!args[0])
-      return message.channel
-        .send(`Please indicate the title of a song!`)
-        .then((msg) => {
-          setTimeout(() => msg.delete(), 5000);
-        });
+        sendMessage(message, embed, noRemoveMessage);
 
-    client.player.play(message, args.join(" "), true);
+        return;
+      }
 
-    if (noRemoveMessage) {
-      return;
+      client.player.play(message, args.join(" "), true);
+
+      const embed: MessageEmbed = generateEmber(client, {
+        type: EmbedType.SUCCESS,
+        description: `Song has been added to queue!`,
+      });
+
+      sendMessage(message, embed, noRemoveMessage);
     }
-
-    message.delete();
   },
 };
