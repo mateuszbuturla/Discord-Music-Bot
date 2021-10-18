@@ -1,9 +1,15 @@
 import { MessageEmbed } from "discord.js";
 
-export const sendMessage = (messageRoot, message: string | MessageEmbed) => {
+export const sendMessage = (
+  messageRoot,
+  message: string | MessageEmbed,
+  noRemoveMessage?: boolean
+) => {
   messageRoot.channel.send(message).then((msg) => {
     setTimeout(() => msg.delete(), 5000);
   });
 
-  messageRoot.delete();
+  if (!noRemoveMessage) {
+    messageRoot.delete();
+  }
 };
