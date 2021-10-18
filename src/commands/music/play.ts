@@ -11,10 +11,7 @@ export const command: ICommand = {
   aliases: [],
   requireOnSpecificChannel: true,
   run: async (client, message, args, noRemoveMessage) => {
-    if (
-      checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
-      checkIfIsPlayingCurrently(client, message, noRemoveMessage)
-    ) {
+    if (checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage)) {
       if (!args[0]) {
         const embed: MessageEmbed = generateEmber(client, {
           type: EmbedType.ERROR,
