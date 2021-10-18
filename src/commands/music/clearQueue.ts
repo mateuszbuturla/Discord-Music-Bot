@@ -1,4 +1,5 @@
 import { MessageEmbed } from "discord.js";
+import { checkIfIsPlayingCurrently } from "../../helpers/checkIfIsPlayingCurrently";
 import { checkIfUserIsOnVoiceChannel } from "../../helpers/checkIfUserIsOnVoiceChannel";
 import { ICommand } from "../../interfaces";
 import { EmbedType } from "../../interfaces/Embed.interface";
@@ -12,7 +13,7 @@ export const command: ICommand = {
   run: async (client, message, args, noRemoveMessage) => {
     if (
       checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
-      checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage)
+      checkIfIsPlayingCurrently(client, message, noRemoveMessage)
     ) {
       if (client.player.getQueue(message).tracks.length <= 1) {
         const embed: MessageEmbed = generateEmber(client, {
