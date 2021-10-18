@@ -3,6 +3,7 @@ import ConfigJSON from "../config.json";
 import { IConfig } from "../interfaces/Config.interface";
 import { EmbedType } from "../interfaces/Embed.interface";
 import { generateEmber } from "../utils/generateEmbed";
+import { sendMessage } from "../utils/sendMessage";
 
 export const commandNotFound = (client, message) => {
   const config: IConfig = ConfigJSON;
@@ -12,9 +13,7 @@ export const commandNotFound = (client, message) => {
     description: `Unknown command. Type ${config.prefix}help to show commands list.`,
   });
 
-  message.channel.send(embed).then((msg) => {
-    setTimeout(() => msg.delete(), 5000);
-  });
+  sendMessage(message, embed);
 
   message.delete();
 };
