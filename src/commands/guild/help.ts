@@ -1,5 +1,7 @@
 import { MessageEmbed } from "discord.js";
 import { ICommand } from "../../interfaces";
+import { EmbedType } from "../../interfaces/Embed.interface";
+import { generateEmber } from "../../utils/generateEmbed";
 
 export const command: ICommand = {
   name: "help",
@@ -7,17 +9,15 @@ export const command: ICommand = {
   requireOnSpecificChannel: false,
 
   run: async (client, message, args) => {
-    const embed = new MessageEmbed();
-
-    embed.setColor("RED");
-    embed.setAuthor(
-      client.user.username,
-      client.user.displayAvatarURL({ size: 1024, dynamic: true })
-    );
-
     const commands = client.commands;
 
-    embed.setDescription("Commands list for Owl Music Bot");
+    const embed: MessageEmbed = generateEmber(client, {
+      type: EmbedType.SUCCESS,
+      description: "Commands list for Owl Music Bot",
+      footer: "Made by Bucik689",
+      setTimestamp: true,
+    });
+
     embed.addField(
       `Enabled - ${commands.size}`,
       commands
@@ -28,12 +28,6 @@ export const command: ICommand = {
             }`
         )
         .join(" | ")
-    );
-
-    embed.setTimestamp();
-    embed.setFooter(
-      "Made by Bucik689",
-      message.author.avatarURL({ dynamic: true })
     );
 
     message.author.send(embed);

@@ -7,4 +7,5 @@ export interface EmbedOptions {
   type: EmbedType;
   description: string;
   footer?: string;
+  setTimestamp?: boolean;
 }

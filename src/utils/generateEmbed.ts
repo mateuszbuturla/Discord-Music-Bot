@@ -4,7 +4,7 @@ import { EmbedOptions } from "../interfaces/Embed.interface";
 
 export const generateEmber = (
   client,
-  { type, description, footer }: EmbedOptions
+  { type, description, footer, setTimestamp }: EmbedOptions
 ): MessageEmbed => {
   const embed = new MessageEmbed();
 
@@ -17,6 +17,10 @@ export const generateEmber = (
 
   if (footer) {
     embed.setFooter(footer);
+  }
+
+  if (setTimestamp) {
+    embed.setTimestamp();
   }
 
   return embed;
