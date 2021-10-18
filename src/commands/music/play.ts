@@ -1,5 +1,4 @@
 import { ICommand } from "../../interfaces";
-import { checkChannel } from "../../helpers/checkChannel";
 import { checkIfUserIsOnVoiceChannel } from "../../helpers/checkIfUserIsOnVoiceChannel";
 import { checkIfIsPlayingCurrently } from "../../helpers/checkIfIsPlayingCurrently";
 import { generateEmber } from "../../utils/generateEmbed";
