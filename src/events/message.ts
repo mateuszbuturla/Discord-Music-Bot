@@ -1,6 +1,7 @@
 import { IEvent, ICommand } from "../interfaces";
 import { Message } from "discord.js";
 import { checkChannel } from "../helpers/checkChannel";
+import ConfigJSON from "../config.json";
 
 export const event: IEvent = {
   name: "message",
@@ -24,14 +25,26 @@ export const event: IEvent = {
 
     const command = client.commands.get(cmd) || client.aliases.get(cmd);
 
-    if (command.requireOnSpecificChannel) {
-      const validateChannel = checkChannel(message);
+    if (command) {
+      if (command.requireOnSpecificChannel) {
+        const validateChannel = checkChannel(message);
 
-      if (!validateChannel) {
-        return;
+        if (!validateChannel) {
+          return;
+        }
       }
-    }
 
-    if (command) (command as ICommand).run(client, message, args);
+      (command as ICommand).run(client, message, args);
+    } else {
+      message.channel
+        .send(
+          `Unknown command. Type ${ConfigJSON.prefix}help to show commands list.`
+        )
+        .then((msg) => {
+          setTimeout(() => msg.delete(), 5000);
+        });
+
+      message.delete();
+    }
   },
 };
