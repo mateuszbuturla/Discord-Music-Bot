@@ -1,53 +1,41 @@
+import { MessageEmbed } from "discord.js";
+import { checkIfIsPlayingCurrently } from "../../helpers/checkIfIsPlayingCurrently";
+import { checkIfUserIsOnVoiceChannel } from "../../helpers/checkIfUserIsOnVoiceChannel";
 import { ICommand } from "../../interfaces";
+import { EmbedType } from "../../interfaces/Embed.interface";
+import { generateEmber } from "../../utils/generateEmbed";
+import { sendMessage } from "../../utils/sendMessage";
 
 export const command: ICommand = {
   name: "pause",
   aliases: [],
   requireOnSpecificChannel: true,
   run: async (client, message, args, noRemoveMessage) => {
-    if (!message.member.voice.channel)
-      return message.channel
-        .send(`You're not in a voice channel !`)
-        .then((msg) => {
-          setTimeout(() => msg.delete(), 5000);
-        });
-
     if (
-      message.guild.me.voice.channel &&
-      message.member.voice.channel.id !== message.guild.me.voice.channel.id
-    )
-      return message.channel
-        .send(`You are not in the same voice channel !`)
-        .then((msg) => {
-          setTimeout(() => msg.delete(), 5000);
+      checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
+      checkIfIsPlayingCurrently(client, message, noRemoveMessage)
+    ) {
+      if (client.player.getQueue(message).paused) {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.ERROR,
+          description: `The music is already paused !`,
         });
 
-    if (!client.player.getQueue(message))
-      return message.channel
-        .send(`No music currently playing !`)
-        .then((msg) => {
-          setTimeout(() => msg.delete(), 5000);
-        });
+        sendMessage(message, embed, noRemoveMessage);
 
-    if (client.player.getQueue(message).paused)
-      return message.channel
-        .send(`The music is already paused !`)
-        .then((msg) => {
-          setTimeout(() => msg.delete(), 5000);
-        });
+        return;
+      }
 
-    client.player.pause(message);
+      client.player.pause(message);
 
-    message.channel
-      .send(` Song ${client.player.getQueue(message).playing.title} paused !`)
-      .then((msg) => {
-        setTimeout(() => msg.delete(), 5000);
+      const embed: MessageEmbed = generateEmber(client, {
+        type: EmbedType.SUCCESS,
+        description: `Song ${
+          client.player.getQueue(message).playing.title
+        } paused !`,
       });
 
-    if (noRemoveMessage) {
-      return;
+      sendMessage(message, embed, noRemoveMessage);
     }
-
-    message.delete();
   },
 };
