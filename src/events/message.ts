@@ -28,7 +28,7 @@ export const event: IEvent = {
 
     if (command) {
       if (command.requireOnSpecificChannel) {
-        const validateChannel = checkChannel(message);
+        const validateChannel = checkChannel(client, message);
 
         if (!validateChannel) {
           return;
