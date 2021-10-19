@@ -9,23 +9,23 @@ import { sendMessage } from "../../utils/sendMessage";
 const reactions = [
   {
     key: "pause",
-    icon: "⏸️ pause",
+    icon: "⏸️",
   },
   {
     key: "stop",
-    icon: "⏹️ stop",
+    icon: "⏹️",
   },
   {
     key: "skip",
-    icon: "⏭️ skip",
+    icon: "⏭️",
   },
   {
     key: "loop",
-    icon: "🔄 loop",
+    icon: "🔄",
   },
   {
     key: "clear",
-    icon: "🚮 clear",
+    icon: "🚮",
   },
 ];
 
