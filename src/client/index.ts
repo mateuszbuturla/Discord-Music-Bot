@@ -81,6 +81,13 @@ class ExtendedClient extends Client {
 
     this.on("ready", () => {
       this.setRootBotMessageReactions();
+      this.user.setPresence({
+        status: "online",
+        activity: {
+          name: `Using: ${this.config.prefix}help`,
+          type: "PLAYING",
+        },
+      });
     });
   }
 

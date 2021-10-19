@@ -1,6 +1,6 @@
 {
   "token": "ODg3MjUyNDIwMTc3MDQ3NTUy.YUBcNQ.ro_ue5GZaflD6EVrwQ8kRRID9_8",
-  "prefix": "#!",
-  "botChannel": "song-request",
+  "prefix": "o!",
+  "botChannel": "owl-music-bot",
   "botName": "Owl Music Bot"
 }
