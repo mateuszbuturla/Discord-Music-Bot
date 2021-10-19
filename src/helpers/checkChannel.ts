@@ -11,7 +11,7 @@ export const checkChannel = (client, message): boolean => {
   if (!message.channel.name.includes(config.botChannel)) {
     const embed: MessageEmbed = generateEmber(client, {
       type: EmbedType.ERROR,
-      description: `Do commands only at <#${config.botChannel}>! \n You can generate bot channel automatically using command !setup`,
+      description: `Do commands only at <#${config.botChannel}>! \n You can generate bot channel automatically using command ${config.prefix}setup`,
     });
 
     sendMessage(message, embed);
