@@ -51,7 +51,11 @@ export const command: ICommand = {
     message.guild.channels
       .create(config.botChannel)
       .then((channel) =>
-        channel.send(config.botName, { files: ["../../assets/logo.png"] })
+        channel.send(config.botName, {
+          files: [
+            "https://cdn.discordapp.com/app-icons/887252420177047552/1f674ac668c75684fae9beba7d4c39e8.png",
+          ],
+        })
       )
       .then((msg) => {
         reactions.map((reaction) => {
