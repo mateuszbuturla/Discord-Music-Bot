@@ -92,45 +92,47 @@ class ExtendedClient extends Client {
       }
     });
 
-    this.rootBotChannel.messages.fetch().then((messages) => {
-      let count = 0;
-      let messagesArray = [];
+    if (this.rootBotChannel) {
+      this.rootBotChannel.messages.fetch().then((messages) => {
+        let count = 0;
+        let messagesArray = [];
 
-      messages.forEach((message) => {
-        messagesArray = [...messagesArray, message];
-        count++;
-      });
+        messages.forEach((message) => {
+          messagesArray = [...messagesArray, message];
+          count++;
+        });
 
-      const rootBotMessage = messagesArray[count - 1];
-      this.rootBotMessage = rootBotMessage;
+        const rootBotMessage = messagesArray[count - 1];
+        this.rootBotMessage = rootBotMessage;
 
-      reactions.map((reaction) => {
-        rootBotMessage.react(reaction.icon);
+        reactions.map((reaction) => {
+          rootBotMessage.react(reaction.icon);
 
-        const reactionFilter = (filterReaction, user) =>
-          filterReaction.emoji.name === reaction.icon &&
-          user.id !== rootBotMessage.author.id;
+          const reactionFilter = (filterReaction, user) =>
+            filterReaction.emoji.name === reaction.icon &&
+            user.id !== rootBotMessage.author.id;
 
-        const reactionEmoji = rootBotMessage.createReactionCollector(
-          reactionFilter,
-          {
-            time: 60000,
-          }
-        );
-
-        reactionEmoji.on("collect", (r, u) => {
-          r.users.remove(
-            r.users.cache
-              .filter((u) => u !== this.rootBotMessage.author)
-              .first()
+          const reactionEmoji = rootBotMessage.createReactionCollector(
+            reactionFilter,
+            {
+              time: 60000,
+            }
           );
-          const command = this.commands.get(reaction.key);
 
-          if (command)
-            (command as ICommand).run(this, rootBotMessage, [], true);
+          reactionEmoji.on("collect", (r, u) => {
+            r.users.remove(
+              r.users.cache
+                .filter((u) => u !== this.rootBotMessage.author)
+                .first()
+            );
+            const command = this.commands.get(reaction.key);
+
+            if (command)
+              (command as ICommand).run(this, rootBotMessage, [], true);
+          });
         });
       });
-    });
+    }
   };
 }
 
