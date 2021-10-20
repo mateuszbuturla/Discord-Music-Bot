@@ -18,16 +18,51 @@ export const command: ICommand = {
           description: `Please indicate the title of a song!`,
         });
 
-        sendMessage(message, embed, noRemoveMessage);
-
-        return;
+        return sendMessage(message, embed, noRemoveMessage);
       }
 
-      client.player.play(message, args.join(" "), true);
+      const queue = client.player.createQueue(message.guild, {
+        metadata: message,
+      });
+      const query = args.join(" ");
+
+      try {
+        if (!queue.connection) {
+          await queue.connect(message.member.voice.channel);
+        }
+      } catch (err) {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not join your voice channel`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
+
+      const track = await client.player
+        .search(query, {
+          requestedBy: message.author,
+        })
+        .then((x) => x.tracks[0]);
+
+      if (!track) {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Track **${query}** not found!`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
+
+      await queue.addTrack(track);
+
+      if (!queue.playing) {
+        await queue.play();
+      }
 
       const embed: MessageEmbed = generateEmber(client, {
         type: EmbedType.SUCCESS,
-        description: `Song has been added to queue!`,
+        description: `Loading track **${track.title}**!`,
       });
 
       sendMessage(message, embed, noRemoveMessage);

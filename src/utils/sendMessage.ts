@@ -5,9 +5,15 @@ export const sendMessage = (
   message: string | MessageEmbed,
   noRemoveMessage?: boolean
 ) => {
-  messageRoot.channel.send(message).then((msg) => {
-    setTimeout(() => msg.delete(), 5000);
-  });
+  if (typeof message === "string") {
+    messageRoot.channel.send(message).then((msg) => {
+      setTimeout(() => msg.delete(), 5000);
+    });
+  } else {
+    messageRoot.channel.send({ embeds: [message] }).then((msg) => {
+      setTimeout(() => msg.delete(), 5000);
+    });
+  }
 
   if (!noRemoveMessage) {
     messageRoot.delete();
