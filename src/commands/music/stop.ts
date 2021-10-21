@@ -15,16 +15,25 @@ export const command: ICommand = {
       checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
       checkIfIsPlayingCurrently(client, message, noRemoveMessage)
     ) {
-      const queue = client.player.getQueue(message.guild.id);
-      queue.setRepeatMode(0);
-      queue.stop();
+      try {
+        const queue = client.player.getQueue(message.guild.id);
+        queue.setRepeatMode(0);
+        queue.stop();
 
-      const embed: MessageEmbed = generateEmber(client, {
-        type: EmbedType.SUCCESS,
-        description: `Music **stopped**!`,
-      });
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Music **stopped**!`,
+        });
 
-      sendMessage(message, embed, noRemoveMessage);
+        sendMessage(message, embed, noRemoveMessage);
+      } catch {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not stop queue!`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
     }
   },
 };
