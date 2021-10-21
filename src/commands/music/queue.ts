@@ -15,23 +15,33 @@ export const command: ICommand = {
       checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
       checkIfIsPlayingCurrently(client, message, noRemoveMessage)
     ) {
-      const queue = client.player.getQueue(message);
+      try {
+        const queue = client.player.getQueue(message.guild.id);
+        queue.seek(Number(args[0]));
 
-      const embed: MessageEmbed = generateEmber(client, {
-        type: EmbedType.SUCCESS,
-        description:
-          `Current : ${queue.playing.title} | ${queue.playing.author}\n\n` +
-          (queue.tracks
-            .map((track, i) => {
-              return `**#${i + 1}** - ${track.title} | ${
-                track.author
-              } (requested by : ${track.requestedBy.username})`;
-            })
-            .join("\n") +
-            `\nIn the playlist **${queue.tracks.length}** song(s)...`),
-      });
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description:
+            `Current : ${queue.current.title}\n\n` +
+            (queue.tracks
+              .map((track, i) => {
+                return `**#${i + 1}** - ${track.title} | ${
+                  track.author
+                } (requested by : ${track.requestedBy.username})`;
+              })
+              .join("\n") +
+              `\nIn the playlist **${queue.tracks.length}** song(s)...`),
+        });
 
-      sendMessage(message, embed, noRemoveMessage);
+        sendMessage(message, embed, noRemoveMessage);
+      } catch {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not show queue!`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
     }
   },
 };
