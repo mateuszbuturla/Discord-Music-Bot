@@ -1,11 +1,25 @@
 import Client from "../client";
 import { ClientEvents } from "discord.js";
+import { Queue, Track } from "discord-player";
 
-interface Run {
-  (client: Client, ...args: any[]);
+interface RunClient {
+  (client: Client | Queue, ...args: any[]);
+}
+interface RunPlayer {
+  (queue: Queue, track: Track, client: Client);
 }
 
-export interface IEvent {
+export enum EventType {
+  CLIENT,
+  PLAYER,
+}
+export interface IEventClient {
   name: keyof ClientEvents;
-  run: Run;
+  type: EventType;
+  run: RunClient;
+}
+export interface IEventPlayer {
+  name: string;
+  type: EventType;
+  run: RunPlayer;
 }

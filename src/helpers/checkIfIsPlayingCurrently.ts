@@ -8,7 +8,9 @@ export const checkIfIsPlayingCurrently = (
   message,
   noRemoveMessage: boolean
 ): boolean => {
-  if (!client.player.getQueue(message)) {
+  const queue = client.player.getQueue(message.guild.id);
+
+  if (!queue.playing) {
     const embed: MessageEmbed = generateEmber(client, {
       type: EmbedType.ERROR,
       description: `No music currently playing !`,

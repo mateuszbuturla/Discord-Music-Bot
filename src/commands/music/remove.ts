@@ -24,7 +24,7 @@ export const command: ICommand = {
         sendMessage(message, embed, noRemoveMessage);
       }
 
-      const queue = client.player.getQueue(message);
+      const queue = client.player.getQueue(message.guild.id);
 
       if (Number[args[0]] > queue.tracks.length) {
         const embed: MessageEmbed = generateEmber(client, {
@@ -35,14 +35,23 @@ export const command: ICommand = {
         sendMessage(message, embed, noRemoveMessage);
       }
 
-      client.player.remove(message, Number(args[0]));
+      try {
+        queue.remove(Number(args[0]));
 
-      const embed: MessageEmbed = generateEmber(client, {
-        type: EmbedType.SUCCESS,
-        description: `The song with number ${args[0]} has beeen removed!`,
-      });
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `The song with number ${args[0]} has beeen **removed**!`,
+        });
 
-      sendMessage(message, embed, noRemoveMessage);
+        sendMessage(message, embed, noRemoveMessage);
+      } catch {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not remove track!`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
     }
   },
 };

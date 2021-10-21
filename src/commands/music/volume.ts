@@ -20,14 +20,24 @@ export const command: ICommand = {
         sendMessage(message, embed, noRemoveMessage);
       }
 
-      client.player.setVolume(message, Number(args[0]));
+      try {
+        const queue = client.player.getQueue(message.guild.id);
+        queue.setVolume(Number(args[0]));
 
-      const embed: MessageEmbed = generateEmber(client, {
-        type: EmbedType.SUCCESS,
-        description: `Volume has been changed!`,
-      });
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Volume **changed**!`,
+        });
 
-      sendMessage(message, embed, noRemoveMessage);
+        sendMessage(message, embed, noRemoveMessage);
+      } catch {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not change volume!`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
     }
   },
 };

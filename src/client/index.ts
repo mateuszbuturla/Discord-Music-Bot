@@ -5,6 +5,7 @@ import { ICommand, IConfig, IEvent } from "../interfaces";
 import ConfigJSON from "../config.json";
 import { Player } from "discord-player";
 import { logger } from "../utils/logger";
+import { EventType } from "../interfaces/Event.interface";
 
 const reactions = [
   {
@@ -51,6 +52,8 @@ class ExtendedClient extends Client {
   public async init() {
     this.login(this.config.token);
 
+    this.player = new Player(this);
+
     const commandPath = path.join(__dirname, "..", "commands");
     readdirSync(commandPath).forEach((dir) => {
       const commands = readdirSync(`${commandPath}/${dir}`).filter((file) =>
@@ -74,13 +77,21 @@ class ExtendedClient extends Client {
       const { event } = await import(`${eventPath}/${file}`);
       this.events.set(event.name, event);
       logger(`Event ${event.name} has been loaded`);
-      this.on(event.name, event.run.bind(null, this));
+      if (event.type === EventType.CLIENT) {
+        this.on(event.name, event.run.bind(null, this));
+      } else if (event.type === EventType.PLAYER) {
+        this.player.on(event.name, (queue, track) =>
+          event.run(queue, track, this)
+        );
+      }
     });
 
-    this.player = new Player(this);
+    this.on("interactionCreate", (msg) => {
+      console.log(msg);
+    });
 
     this.on("ready", () => {
-      this.setRootBotMessageReactions();
+      // this.setRootBotMessageReactions();
       this.user.setPresence({
         status: "online",
         activity: {
