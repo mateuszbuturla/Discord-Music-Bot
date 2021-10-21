@@ -17,7 +17,6 @@ export const command: ICommand = {
     ) {
       try {
         const queue = client.player.getQueue(message.guild.id);
-        queue.seek(Number(args[0]));
 
         const embed: MessageEmbed = generateEmber(client, {
           type: EmbedType.SUCCESS,
