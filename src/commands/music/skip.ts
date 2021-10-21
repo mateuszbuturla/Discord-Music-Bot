@@ -15,14 +15,24 @@ export const command: ICommand = {
       checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
       checkIfIsPlayingCurrently(client, message, noRemoveMessage)
     ) {
-      client.player.skip(message);
+      try {
+        const queue = client.player.getQueue(message.guild.id);
+        queue.skip();
 
-      const embed: MessageEmbed = generateEmber(client, {
-        type: EmbedType.SUCCESS,
-        description: `The current music has just been **skipped** !`,
-      });
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `The current music has just been **skipped** !`,
+        });
 
-      sendMessage(message, embed, noRemoveMessage);
+        sendMessage(message, embed, noRemoveMessage);
+      } catch {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not skip track!`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
     }
   },
 };

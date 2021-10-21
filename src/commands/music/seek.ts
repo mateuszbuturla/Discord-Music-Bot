@@ -24,14 +24,24 @@ export const command: ICommand = {
         sendMessage(message, embed, noRemoveMessage);
       }
 
-      client.player.seek(message, Number(args[0]));
+      try {
+        const queue = client.player.getQueue(message.guild.id);
+        queue.seek(Number(args[0]));
 
-      const embed: MessageEmbed = generateEmber(client, {
-        type: EmbedType.SUCCESS,
-        description: `The song have been moved to ${args[1]} seconds!`,
-      });
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Volume **changed**!`,
+        });
 
-      sendMessage(message, embed, noRemoveMessage);
+        sendMessage(message, embed, noRemoveMessage);
+      } catch {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not seek track!`,
+        });
+
+        return sendMessage(message, embed, noRemoveMessage);
+      }
     }
   },
 };

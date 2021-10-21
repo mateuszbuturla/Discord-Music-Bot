@@ -3,9 +3,11 @@ import { Message } from "discord.js";
 import { checkChannel } from "../helpers/checkChannel";
 import ConfigJSON from "../config.json";
 import { commandNotFound } from "../helpers/commandNotFound";
+import { EventType } from "../interfaces/Event.interface";
 
 export const event: IEvent = {
   name: "message",
+  type: EventType.CLIENT,
   run: (client, message: Message) => {
     if (
       message.author.bot ||

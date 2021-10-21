@@ -15,28 +15,28 @@ export const command: ICommand = {
       checkIfUserIsOnVoiceChannel(client, message, noRemoveMessage) &&
       checkIfIsPlayingCurrently(client, message, noRemoveMessage)
     ) {
-      if (client.player.getQueue(message).tracks.length <= 1) {
+      try {
+        const queue = client.player.getQueue(message.guild.id);
+        const isLoop = queue.repeatMode;
+        queue.setRepeatMode(isLoop === 0 ? 2 : 0);
+
         const embed: MessageEmbed = generateEmber(client, {
-          type: EmbedType.ERROR,
-          description: `There is only one song in the queue.`,
+          type: EmbedType.SUCCESS,
+          description:
+            isLoop === 2
+              ? `Repeat mode **disabled** !`
+              : `Repeat mode **enabled** !`,
         });
 
         sendMessage(message, embed, noRemoveMessage);
+      } catch {
+        const embed: MessageEmbed = generateEmber(client, {
+          type: EmbedType.SUCCESS,
+          description: `Could not change loop!`,
+        });
 
-        return;
+        return sendMessage(message, embed, noRemoveMessage);
       }
-
-      const isLoop = client.player.getQueue(message).loopMode;
-
-      client.player.setLoopMode(message, !isLoop);
-      const embed: MessageEmbed = generateEmber(client, {
-        type: EmbedType.SUCCESS,
-        description: isLoop
-          ? `Repeat mode **disabled** !`
-          : `Repeat mode **enabled** !`,
-      });
-
-      sendMessage(message, embed, noRemoveMessage);
     }
   },
 };

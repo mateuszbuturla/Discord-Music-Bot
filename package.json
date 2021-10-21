@@ -13,8 +13,11 @@
   "license": "ISC",
   "devDependencies": {},
   "dependencies": {
-    "discord-player": "^3.3.2",
-    "discord.js": "12.5.3",
+    "@discordjs/opus": "^0.6.0",
+    "discord-player": "^5.1.0",
+    "discord.js": "^13.2.0",
+    "node-opus": "^0.3.3",
+    "opusscript": "^0.0.8",
     "ts-node": "^10.2.1",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.4.3"
