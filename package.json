@@ -13,9 +13,11 @@
   "author": "Mateusz Buturla",
   "license": "ISC",
   "dependencies": {
-    "discord.js": "^14.6.0"
+    "discord.js": "^14.6.0",
+    "node-polyglot": "^2.4.2"
   },
   "devDependencies": {
+    "@types/node-polyglot": "^2.4.2",
     "@typescript-eslint/eslint-plugin": "^5.44.0",
     "dotenv": "^16.0.3",
     "eslint": "^8.28.0",

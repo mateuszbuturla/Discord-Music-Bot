@@ -1,0 +1,9 @@
+{
+  "locale": "en",
+  "langNames": "en",
+  "phrases": {
+    "error": {
+      "command-not-found": "Command not found"
+    }
+  }
+}

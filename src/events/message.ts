@@ -26,6 +26,7 @@ export const event: IEventClient = {
     if (command) {
       (command as ICommand).run(client, message, args);
     } else {
+      console.log('asdasd');
       commandNotFound(client, message);
     }
   },
