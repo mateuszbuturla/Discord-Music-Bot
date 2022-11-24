@@ -1,0 +1,18 @@
+version: '3.4'
+services:
+  owl-music-bot:
+    container_name: owl-music-bot
+    build:
+      context: .
+      target: development
+    volumes:
+      - ./:/usr/src/app
+      - /usr/src/app/node_modules
+    env_file:
+      - .env
+    command: npm run start
+    networks:
+      - webnet
+
+networks:
+  webnet:
