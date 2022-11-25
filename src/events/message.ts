@@ -1,10 +1,11 @@
+import { generateServerRecord } from '../entities';
 import { commandNotFound } from '../components';
 import { getPrefix } from '../helpers';
 import { IEventClient, ICommand } from '../types';
 
 export const event: IEventClient = {
   name: 'messageCreate',
-  run: (client, message) => {
+  run: async (client, message) => {
     const prefix = getPrefix();
 
     if (
@@ -14,6 +15,8 @@ export const event: IEventClient = {
     ) {
       return;
     }
+
+    await generateServerRecord(message.guildId);
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
 

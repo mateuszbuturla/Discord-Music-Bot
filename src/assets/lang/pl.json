@@ -1,0 +1,20 @@
+{
+  "locale": "en",
+  "langNames": "en",
+  "phrases": {
+    "error": {
+      "command-not-found": "Nieznana komenda. Wyślij `%{prefix}help` aby wyświetlić listę dostępnych komend.",
+      "command-no-description": "Komenda `%{command}` nie posiada opisu"
+    },
+    "command": {
+      "help": {
+        "help-description": "Zwraca listę wszystkich dostępnych komend",
+        "description": "Możesz zacząć słuchać muzyki po dołączeniu na kanał i wysłaniu wiadomości `%{prefix}play nazwa-piosenki`",
+        "command-list": "Lista komend (Dostępne - %{count}):"
+      },
+      "ping": {
+        "help-description": "Zwraca wartość aktualnych opóźnień"
+      }
+    }
+  }
+}
