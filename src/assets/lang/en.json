@@ -3,7 +3,13 @@
   "langNames": "en",
   "phrases": {
     "error": {
-      "command-not-found": "Command not found"
+      "command-not-found": "Unknown command. Type %{prefix}help to show commands list."
+    },
+    "command": {
+      "help": {
+        "description": "You can start listening music by just joinning a voice channel and typing: `%{prefix}play song-name`",
+        "command-list": "Command list (Enabled - %{count}):"
+      }
     }
   }
 }
