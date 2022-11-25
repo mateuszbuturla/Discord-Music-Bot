@@ -23,10 +23,10 @@ export const event: IEventClient = {
 
     const command = client.commands.get(cmd) || client.aliases.get(cmd);
 
-    if (command) {
-      (command as ICommand).run(client, message, args);
-    } else {
-      commandNotFound(client, message);
+    if (!command) {
+      return commandNotFound(client, message);
     }
+
+    (command as ICommand).run(client, message, args);
   },
 };

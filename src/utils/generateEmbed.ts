@@ -17,7 +17,7 @@ type Fields = FieldRows | SingleFieldRow;
 
 type Options = {
   type?: MessageType;
-  description: string | Translate;
+  description?: string | Translate;
   fields?: Fields;
 };
 
@@ -69,11 +69,14 @@ export const generateEmbed = async ({
   const embed = new EmbedBuilder()
     .setColor(getColorByType(type))
     .setTitle(botName)
-    .setDescription(await getRawText(description))
     .setTimestamp()
     .setFooter({
       text: botName,
     });
+
+  if (description) {
+    embed.setDescription(await getRawText(description));
+  }
 
   if (fields) {
     const rawFields = await getRawFieldRows(fields);

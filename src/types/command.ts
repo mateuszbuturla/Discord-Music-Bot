@@ -7,7 +7,7 @@ interface Run {
 
 export interface ICommand {
   name: string;
-  description?: string;
+  descriptionKey?: string;
   aliases?: string[];
   run: Run;
 }
