@@ -9,6 +9,5 @@ export const AppDataSource = new DataSource({
   password: process.env.MYSQL_PASSWORD,
   database: process.env.MYSQL_DATABASE,
   synchronize: true,
-  logging: true,
   entities: [ServerConfigEntity],
 });
