@@ -1,5 +1,16 @@
 version: '3.4'
 services:
+  owl-music-bot-db:
+    container_name: mysql
+    image: mysql:5.7
+    env_file:
+      - .env
+    ports:
+      - '3306:3306'
+    volumes:
+      - db-vol:/var/lib/mysql
+    networks:
+      - webnet
   owl-music-bot:
     container_name: owl-music-bot
     build:
@@ -16,3 +27,6 @@ services:
 
 networks:
   webnet:
+
+volumes:
+  db-vol:

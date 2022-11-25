@@ -1,3 +1,4 @@
+import { getServerLanguage } from '../../entities';
 import { Collection, Message } from 'discord.js';
 import { generateEmbed } from '../../utils';
 import { getPrefix } from '../../helpers';
@@ -15,6 +16,7 @@ const getListOfCommandsAsString = (
 const sendCommandList = async (client: Client, message: Message) => {
   const prefix = getPrefix();
   const commands = client.commands;
+  const lang = await getServerLanguage(message.guildId as string);
 
   const commandListField = {
     name: {
@@ -28,6 +30,7 @@ const sendCommandList = async (client: Client, message: Message) => {
     type: MessageType.INFORMATION,
     description: { key: 'command.help.description', args: { prefix } },
     fields: [commandListField],
+    lang,
   });
 
   message.channel.send({ embeds: [embed] });
@@ -39,6 +42,7 @@ const sendSpecyficCommandDescription = async (
   commandName: string,
 ) => {
   const prefix = getPrefix();
+  const lang = await getServerLanguage(message.guildId as string);
 
   const command =
     client.commands.get(commandName) || client.aliases.get(commandName);
@@ -54,6 +58,7 @@ const sendSpecyficCommandDescription = async (
         key: 'error.command-no-description',
         args: { command: `${prefix}${commandName}` },
       },
+      lang,
     });
     return message.channel.send({ embeds: [embed] });
   }
@@ -66,6 +71,7 @@ const sendSpecyficCommandDescription = async (
   const embed = await generateEmbed({
     type: MessageType.INFORMATION,
     fields: [commandDescriptionField],
+    lang,
   });
 
   message.channel.send({ embeds: [embed] });

@@ -1,12 +1,21 @@
 import { Message } from 'discord.js';
-import { sendMessage, translate } from '../utils';
+import { generateEmbed } from '../utils';
 import Client from '../client';
-import { Language } from '../types';
+import { MessageType } from '../types';
 import { getPrefix } from '../helpers';
+import { getServerLanguage } from '../entities';
 
 export const commandNotFound = async (client: Client, message: Message) => {
-  const { __ } = await translate(Language.en);
+  const lang = await getServerLanguage(message.guildId as string);
   const prefix = getPrefix();
 
-  sendMessage(message, __('error.command-not-found', { prefix }));
+  const embed = await generateEmbed({
+    type: MessageType.ERROR,
+    description: {
+      key: 'error.command-not-found',
+      args: { prefix },
+    },
+    lang,
+  });
+  return message.channel.send({ embeds: [embed] });
 };
