@@ -1,1 +1,1 @@
-export * from './commandNotFound';
+export * from './error';

@@ -4,7 +4,11 @@
   "phrases": {
     "error": {
       "command-not-found": "Unknown command. Type %{prefix}help to show commands list.",
-      "command-no-description": "`%{command}` command has no description"
+      "command-no-description": "`%{command}` command has no description",
+      "admin-only": "Command is available only for users with administrator privileges",
+      "server-error": "Server error. Try to use %{prefix}setup command. If that doesn't help, contact with bot owner",
+      "missing-args": "Required arguments are not provided: %{missingArgsList}",
+      "language-not-exist": "Provided language is not exist"
     },
     "command": {
       "help": {
@@ -14,6 +18,13 @@
       },
       "ping": {
         "help-description": "Returns current ping"
+      },
+      "lang": {
+        "args": {
+          "language": "language"
+        },
+        "help-description": "Allow change bot language. Usage %{prefix}lang language. Available languages: %{languages}.",
+        "success": "Languge has been change"
       }
     }
   }
