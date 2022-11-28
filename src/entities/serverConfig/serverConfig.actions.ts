@@ -24,3 +24,20 @@ export const getServerLanguage = async (guildId: string): Promise<Language> => {
 
   return findServer.lang;
 };
+
+export const changeServerLanguage = async (
+  guildId: string,
+  lang: Language,
+): Promise<boolean> => {
+  const findServer = await ServerConfigEntity.findOne({ where: { guildId } });
+
+  if (!findServer) {
+    return false;
+  }
+
+  findServer.lang = lang;
+
+  await findServer.save();
+
+  return true;
+};

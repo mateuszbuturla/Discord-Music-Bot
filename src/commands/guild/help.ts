@@ -4,7 +4,7 @@ import { generateEmbed } from '../../utils';
 import { getPrefix } from '../../helpers';
 import { ICommand, MessageType } from '../../types';
 import Client from '../../client';
-import { commandNotFound } from '../../components';
+import { error } from '../../components';
 
 const getListOfCommandsAsString = (
   commands: Collection<string, ICommand>,
@@ -48,7 +48,10 @@ const sendSpecyficCommandDescription = async (
     client.commands.get(commandName) || client.aliases.get(commandName);
 
   if (!command) {
-    return commandNotFound(client, message);
+    return error(message, {
+      key: 'error.command-not-found',
+      args: { prefix },
+    });
   }
 
   if (!command.descriptionKey) {
